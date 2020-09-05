@@ -1,4 +1,4 @@
-// Copyright 2015 bat authors
+// Copyright 2015 bt authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"): you may
 // not use this file except in compliance with the License. You may obtain
@@ -13,7 +13,7 @@
 // under the License.
 
 // Bat is a Go implemented CLI cURL-like tool for humans
-// bat [flags] [METHOD] URL [ITEM [ITEM]]
+// bt [flags] [METHOD] URL [ITEM [ITEM]]
 package main
 
 import (
@@ -347,11 +347,11 @@ func main() {
 	}
 }
 
-var usageinfo string = `bat is a Go implemented CLI cURL-like tool for humans.
+var usageinfo string = `bt is a Go implemented CLI cURL-like tool for humans.
 
 Usage:
 
-	bat [flags] [METHOD] URL [ITEM [ITEM]]
+	bt [flags] [METHOD] URL [ITEM [ITEM]]
 
 flags:
   -a, -auth=USER[:PASS]       Pass a username:password pair as the argument
@@ -372,7 +372,7 @@ flags:
   -v, -version=true           Show Version Number
 
 METHOD:
-  bat defaults to either GET (if there is no request data) or POST (with request data).
+  bt defaults to either GET (if there is no request data) or POST (with request data).
 
 URL:
   The only information needed to perform a request is a URL. The default scheme is http://,
@@ -387,9 +387,9 @@ ITEM:
 
 Example:
 
-	bat beego.me
+	bt beego.me
 
-more help information please refer to https://github.com/astaxie/bat
+more help information please refer to https://github.com/astaxie/bt
 `
 
 func usage() {
