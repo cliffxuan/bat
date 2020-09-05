@@ -387,9 +387,9 @@ ITEM:
 
 Example:
 
-	bt beego.me
+	bt httpbin.org/ip
 
-more help information please refer to https://github.com/astaxie/bt
+more help information please refer to https://github.com/cliffxuan/bt
 `
 
 func usage() {

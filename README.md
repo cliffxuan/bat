@@ -1,12 +1,16 @@
+# THIS IS A FORK OF https://github.com/astaxie/bat
+> bat is renamed to bt (may rename again) in order to avoid name conflict with https://github.com/sharkdp/bat .
+> I like both of the utilities. Because the latter is a dependency of more tools such as https://github.com/junegunn/fzf.vim
+> and also it's under more active development, forking and renaming the former is more managable.
+
+
 # bt
+
+[<img src="images/example.png" width="480"/>](example.png)
+
 Go implemented CLI cURL-like tool for humans. Bat can be used for testing, debugging, and generally interacting with HTTP servers.
 
 Inspired by [Httpie](https://github.com/jakubroztocil/httpie). Thanks to the author, Jakub.
-
-
-![](images/logo.png)
-
-![](images/example.png)
 
 - [Main Features](#main-features)
 - [Installation](#installation)
@@ -23,10 +27,10 @@ Inspired by [Httpie](https://github.com/jakubroztocil/httpie). Thanks to the aut
 ## Docker
 
     # Build the docker image
-	$ docker build -t astaxie/bt .
-	
-	# Run bt in a container
-	$ docker run --rm -it --net=host astaxie/bt example.org
+    $ docker build -t cliffxuan/bt .
+
+    # Run bt in a container
+    $ docker run --rm -it --net=host cliffxuan/bt example.org
 
 ## Main Features
 
@@ -43,19 +47,19 @@ Inspired by [Httpie](https://github.com/jakubroztocil/httpie). Thanks to the aut
 
 If you only want to install the `bt` tool:
 
-	go get -u github.com/astaxie/bt
+    go get -u github.com/cliffxuan/bt
 
 If you want a mutable copy of source code:
 
-	git clone https://github.com/astaxie/bt ;# clone outside of GOPATH
-	cd bt
-	go install
+    git clone https://github.com/cliffxuan/bt ;# clone outside of GOPATH
+    cd bt
+    go install
 
 Make sure the `~/go/bin` is added into `$PATH`.
 
 ### Install without Modules - Before Go 1.11
 
-	go get -u github.com/astaxie/bt
+    go get -u github.com/cliffxuan/bt
 
 Make sure the `$GOPATH/bin` is added into `$PATH`.
 
@@ -63,59 +67,59 @@ Make sure the `$GOPATH/bin` is added into `$PATH`.
 
 Hello World:
 
-	$ bt beego.me
+    $ bt httpbin.org/ip
 
 Synopsis:
 
-	bt [flags] [METHOD] URL [ITEM [ITEM]]
-	
-See also `bt --help`.	
+    bt [flags] [METHOD] URL [ITEM [ITEM]]
+
+See also `bt --help`.
 
 ### Examples
 
 Basic settings - [HTTP method](#http-method), [HTTP headers](#http-headers) and [JSON](#json) data:
 
-	$ bt PUT example.org X-API-Token:123 name=John
+    $ bt PUT example.org X-API-Token:123 name=John
 
 Any custom HTTP method (such as WebDAV, etc.):
 
-	$ bt -method=PROPFIND example.org name=John
+    $ bt -method=PROPFIND example.org name=John
 
 Submitting forms:
 
-	$ bt -form=true POST example.org hello=World
-	
+    $ bt -form=true POST example.org hello=World
+
 See the request that is being sent using one of the output options:
 
-	$ bt -print="Hhb" example.org
+    $ bt -print="Hhb" example.org
 
 Use Github API to post a comment on an issue with authentication:
 
-	$ bt -a USERNAME POST https://api.github.com/repos/astaxie/bat/issues/1/comments body='bat is awesome!'
+    $ bt -a USERNAME POST https://api.github.com/repos/cliffxuan/bt/issues/1/comments body='bat is awesome!'
 
 Upload a file using redirected input:
 
-	$ bt example.org < file.json
-	
+    $ bt example.org < file.json
+
 Download a file and save it via redirected output:
 
-	$ bt example.org/file > file
-	
+    $ bt example.org/file > file
+
 Download a file wget style:
 
-	$ bt -download=true example.org/file
+    $ bt -download=true example.org/file
 
 Set a custom Host header to work around missing DNS records:
 
-	$ bt localhost:8000 Host:example.com
-	
+    $ bt localhost:8000 Host:example.com
+
 Following is the detailed documentation. It covers the command syntax, advanced usage, and also features additional examples.
-	
+
 ## HTTP Method
 The name of the HTTP method comes right before the URL argument:
 
-	$ bt DELETE example.org/todos/7
-	
+    $ bt DELETE example.org/todos/7
+
 which looks similar to the actual Request-Line that is sent:
 
 DELETE /todos/7 HTTP/1.1
@@ -127,26 +131,26 @@ The only information bt needs to perform a request is a URL. The default scheme 
 
 Additionally, curl-like shorthand for localhost is supported. This means that, for example :3000 would expand to http://localhost:3000 If the port is omitted, then port 80 is assumed.
 
-	$ bt :/foo
+    $ bt :/foo
 
-	GET /foo HTTP/1.1
-	Host: localhost
+    GET /foo HTTP/1.1
+    Host: localhost
 
-	$ bt :3000/bar
-	
-	GET /bar HTTP/1.1
-	Host: localhost:3000
+    $ bt :3000/bar
 
-	$ bt :
+    GET /bar HTTP/1.1
+    Host: localhost:3000
 
-	GET / HTTP/1.1
-	Host: localhost
+    $ bt :
+
+    GET / HTTP/1.1
+    Host: localhost
 
 If you find yourself manually constructing URLs with query string parameters on the terminal, you may appreciate the `param=value` syntax for appending URL parameters so that you don't have to worry about escaping the & separators. To search for bt on Google Images you could use this command:
 
-	$ bt GET www.google.com search=bat tbm=isch
+    $ bt GET www.google.com search=bat tbm=isch
 
-	GET /?search=bt&tbm=isch HTTP/1.1
+    GET /?search=bt&tbm=isch HTTP/1.1
 
 ## Request Items
 There are a few different request item types that provide a convenient mechanism for specifying HTTP headers, simple JSON and form data, files, and URL parameters.
@@ -154,8 +158,8 @@ There are a few different request item types that provide a convenient mechanism
 They are key/value pairs specified after the URL. All have in common that they become part of the actual request that is sent and that their type is distinguished only by the separator used: `:`, `=`, `:=`, `@`, `=@`, and `:=@`. The ones with an `@` expect a file path as value.
 
 
-|       Item Type         |	          Description           |
-| ------------------------| ------------------------------ | 
+|       Item Type         |              Description           |
+| ------------------------| ------------------------------ |
 |HTTP Headers `Name:Value`|Arbitrary HTTP header, e.g. `X-API-Token:123`.|
 |Data Fields `field=value`|Request data fields to be serialized as a JSON object (default), or to be form-encoded (--form, -f).|
 |Form File Fields `field@/dir/file`|Only available with `-form`, `-f`. For example `screenshot@~/Pictures/img.png`. The presence of a file field results in a `multipart/form-data` request.|
@@ -179,63 +183,63 @@ You can use --json=true, -j=true to explicitly set Accept to `application/json` 
 
 Simple example:
 
-	$ bt PUT example.org name=John email=john@example.org
-	PUT / HTTP/1.1
-	Accept: application/json
-	Accept-Encoding: gzip, deflate
-	Content-Type: application/json
-	Host: example.org
-	
-	{
-	    "name": "John",
-	    "email": "john@example.org"
-	}
+    $ bt PUT example.org name=John email=john@example.org
+    PUT / HTTP/1.1
+    Accept: application/json
+    Accept-Encoding: gzip, deflate
+    Content-Type: application/json
+    Host: example.org
+
+    {
+        "name": "John",
+        "email": "john@example.org"
+    }
 
 Even custom/vendored media types that have a json format are getting detected, as long as they implement a json type response and contain a `json` in their declared form:
 
-	$ bt GET example.org/user/1 Accept:application/vnd.example.v2.0+json
-	GET / HTTP/1.1
-	Accept: application/vnd.example.v2.0+json
-	Accept-Encoding: gzip, deflate
-	Content-Type: application/vnd.example.v2.0+json
-	Host: example.org
+    $ bt GET example.org/user/1 Accept:application/vnd.example.v2.0+json
+    GET / HTTP/1.1
+    Accept: application/vnd.example.v2.0+json
+    Accept-Encoding: gzip, deflate
+    Content-Type: application/vnd.example.v2.0+json
+    Host: example.org
 
-	{
-	    "name": "John",
-	    "email": "john@example.org"
-	}
+    {
+        "name": "John",
+        "email": "john@example.org"
+    }
 
 Non-string fields use the := separator, which allows you to embed raw JSON into the resulting object. Text and raw JSON files can also be embedded into fields using =@ and :=@:
 
-	$ bt PUT api.example.com/person/1 \
+    $ bt PUT api.example.com/person/1 \
     name=John \
     age:=29 married:=false hobbies:='["http", "pies"]' \  # Raw JSON
     description=@about-john.txt \   # Embed text file
     bookmarks:=@bookmarks.json      # Embed JSON file
 
-	PUT /person/1 HTTP/1.1
-	Accept: application/json
-	Content-Type: application/json
-	Host: api.example.com
-	
-	{
-	    "age": 29,
-	    "hobbies": [
-	        "http",
-	        "pies"
-	    ],
-	    "description": "John is a nice guy who likes pies.",
-	    "married": false,
-	    "name": "John",
-	    "bookmarks": {
-	        "HTTPie": "http://httpie.org",
-	    }
-	}
-	
+    PUT /person/1 HTTP/1.1
+    Accept: application/json
+    Content-Type: application/json
+    Host: api.example.com
+
+    {
+        "age": 29,
+        "hobbies": [
+            "http",
+            "pies"
+        ],
+        "description": "John is a nice guy who likes pies.",
+        "married": false,
+        "name": "John",
+        "bookmarks": {
+            "HTTPie": "http://httpie.org",
+        }
+    }
+
 Send JSON data stored in a file (see redirected input for more examples):
 
-	$ bt POST api.example.com/person/1 < person.json
-	
+    $ bt POST api.example.com/person/1 < person.json
+
 ## Forms
 Submitting forms are very similar to sending JSON requests. Often the only difference is in adding the `-form=true`, `-f` option, which ensures that data fields are serialized correctly and Content-Type is set to, `application/x-www-form-urlencoded; charset=utf-8`.
 
@@ -243,20 +247,20 @@ It is possible to make form data the implicit content type instead of JSON via t
 
 ### Regular Forms
 
-	$ bt -f=true POST api.example.org/person/1 name='John Smith' \
+    $ bt -f=true POST api.example.org/person/1 name='John Smith' \
     email=john@example.org
 
-	POST /person/1 HTTP/1.1
-	Content-Type: application/x-www-form-urlencoded; charset=utf-8
+    POST /person/1 HTTP/1.1
+    Content-Type: application/x-www-form-urlencoded; charset=utf-8
 
-	name=John+Smith&email=john%40example.org
+    name=John+Smith&email=john%40example.org
 
 ### File Upload Forms
 
 If one or more file fields is present, the serialization and content type is `multipart/form-data`:
 
-	$ bt -f=true POST example.com/jobs name='John Smith' cv@~/Documents/cv.pdf
-	
+    $ bt -f=true POST example.com/jobs name='John Smith' cv@~/Documents/cv.pdf
+
 The request above is the same as if the following HTML form were submitted:
 
 ```
@@ -271,46 +275,46 @@ Note that `@` is used to simulate a file upload form field.
 ## HTTP Headers
 To set custom headers you can use the Header:Value notation:
 
-	$ bt example.org  User-Agent:Bacon/1.0  'Cookie:valued-visitor=yes;foo=bar'  \
-    X-Foo:Bar  Referer:http://beego.me/
+    $ bt example.org  User-Agent:Bacon/1.0  'Cookie:valued-visitor=yes;foo=bar'  \
+    X-Foo:Bar  Referer:http://httpbin.org/ip/
 
-	GET / HTTP/1.1
-	Accept: */*
-	Accept-Encoding: gzip, deflate
-	Cookie: valued-visitor=yes;foo=bar
-	Host: example.org
-	Referer: http://beego.me/
-	User-Agent: Bacon/1.0
-	X-Foo: Bar
-	
+    GET / HTTP/1.1
+    Accept: */*
+    Accept-Encoding: gzip, deflate
+    Cookie: valued-visitor=yes;foo=bar
+    Host: example.org
+    Referer: http://httpbin.org/ip/
+    User-Agent: Bacon/1.0
+    X-Foo: Bar
+
 There are a couple of default headers that bt sets:
 
-	GET / HTTP/1.1
-	Accept: */*
-	Accept-Encoding: gzip, deflate
-	User-Agent: bt/<version>
-	Host: <taken-from-URL>
+    GET / HTTP/1.1
+    Accept: */*
+    Accept-Encoding: gzip, deflate
+    User-Agent: bt/<version>
+    Host: <taken-from-URL>
 
 Any of the default headers can be overridden.
 
 # Authentication
 Basic auth:
 
-	$ bt -a=username:password example.org
+    $ bt -a=username:password example.org
 
 # Proxies
 You can specify proxies to be used through the --proxy argument for each protocol (which is included in the value in case of redirects across protocols):
 
-	$ bt --proxy=http://10.10.1.10:3128 example.org
-	
+    $ bt --proxy=http://10.10.1.10:3128 example.org
+
 With Basic authentication:
 
-	$ bt --proxy=http://user:pass@10.10.1.10:3128 example.org
-	
+    $ bt --proxy=http://user:pass@10.10.1.10:3128 example.org
+
 You can also configure proxies by environment variables HTTP_PROXY and HTTPS_PROXY, and the underlying Requests library will pick them up as well. If you want to disable proxies configured through the environment variables for certain hosts, you can specify them in NO_PROXY.
 
 In your ~/.bash_profile:
 
-	export HTTP_PROXY=http://10.10.1.10:3128
-	export HTTPS_PROXY=https://10.10.1.10:1080
-	export NO_PROXY=localhost,example.com
+    export HTTP_PROXY=http://10.10.1.10:3128
+    export HTTPS_PROXY=https://10.10.1.10:1080
+    export NO_PROXY=localhost,example.com
